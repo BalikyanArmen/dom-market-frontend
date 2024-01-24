@@ -6,7 +6,7 @@ import arrowRight from "../assets/ArrowRight.svg";
 import React, { useState } from "react";
 import Container from "@mui/material/Container";
 
-export const NewProducts = ({ products }) => {
+export const NewProducts = ({ products,title }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handleLeftArrowClick = () => {
@@ -29,7 +29,7 @@ export const NewProducts = ({ products }) => {
 
     return (
         <Container sx={{ marginTop: 2, marginLeft: 0, maxWidth: "unset !important" }}>
-            <Typography variant="h4" align="left" gutterBottom>Новинки</Typography>
+            <Typography variant="h4" align="left" gutterBottom>{title}</Typography>
             <Box sx={{
                 display: "flex",
                 alignItems: "center", // Optional: Align items in the center

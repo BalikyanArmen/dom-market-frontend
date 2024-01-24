@@ -6,6 +6,7 @@ import arrowRight from "../assets/ArrowRight.svg";
 import Typography from "@mui/material/Typography";
 import {NewProducts} from "../components/NewProducts.jsx";
 import PopularProducts from "../components/PopularProducts.jsx";
+import {PartnersPart} from "../components/PartnersPart.jsx";
 
 export default function Home() {
     const products = new Array(33).fill({
@@ -28,8 +29,10 @@ export default function Home() {
         <Box sx={{
             padding:"15px"
         }}>
-            <NewProducts products={products}/>
-            <PopularProducts/>
+            <NewProducts title={"Новинки"} products={products}/>
+            <PopularProducts title={"Популярные категории"}/>
+            <PartnersPart/>
+            <NewProducts title={"Хиты продаж"} products={products}/>
         </Box>
     );
 }
