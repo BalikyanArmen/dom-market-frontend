@@ -3,11 +3,13 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import CategoryCard from "./CategoryCard.jsx";
+import {useNavigate} from "react-router-dom";
 
 const categoryImages = Array.from({length: 8}, (_, index) => `../assets/Category${index > 5 ? index : index + 1}.png`);
 
 const PopularProducts = ({title}) => {
     const [categoryCards, setCategoryCards] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCategoryCards = async () => {
@@ -41,7 +43,8 @@ const PopularProducts = ({title}) => {
             </Typography>
             <Grid container spacing={2}>
                 {categoryCards.map((category, index) => (
-                    <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
+                    <Grid item key={index} xs={12} sm={6} md={4} lg={3}
+                          onClick={() => navigate(`category/?title=${category.title}`)}>
                         <CategoryCard {...category} />
                     </Grid>
                 ))}

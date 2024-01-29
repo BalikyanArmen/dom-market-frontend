@@ -1,39 +1,38 @@
 import React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import {CardActionArea} from '@mui/material';
+import { Card, Rate, Typography } from 'antd';
 import productImage from "../assets/product.png";
 
-export default function ProductCard({title, description, price, rating, reviews, image}) {
+const { Meta } = Card;
+
+const customCardStyle = {
+    display: 'flex',
+    padding: '20px',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '8px',
+    flex: '1 0 0',
+    borderRadius: '6px',
+    border: '1px solid rgba(0, 0, 0, 0.04)',
+    background: '#FFF',
+};
+
+export default function ProductCard({ title, description, price, rating, reviews, image, }) {
     return (
-        <Card sx={{maxWidth: 240, height: 382, margin: '15px'}}>
-            <CardActionArea>
-                <CardMedia
-                    component="img"
-                    height="140"
-                    image={productImage}
-                    alt="Product Image"
-                />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        {description}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Price: {price}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Rating: {rating}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Reviews: {reviews}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
+        <Card
+            style={customCardStyle}
+            cover={<img alt="Product Image" src={productImage} />}
+        >
+            <Meta
+                title={title}
+                description={
+                    <>
+                        <Typography.Paragraph>{description}</Typography.Paragraph>
+                        <Typography.Paragraph>Price: {price}</Typography.Paragraph>
+                        <Typography.Text>Rating: <Rate disabled defaultValue={rating} /></Typography.Text>
+                        <Typography.Text>Reviews: {reviews}</Typography.Text>
+                    </>
+                }
+            />
         </Card>
     );
 }

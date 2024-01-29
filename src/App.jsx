@@ -5,7 +5,8 @@ import About from "./components/About";
 import "./styles/mainStyles.scss";
 import {NavBar} from "./components/NavBar.jsx";
 import {Footer} from "./components/Footer.jsx";
-import {Banner} from "./components/Banner.jsx"; // Import the SVG file
+import {Banner} from "./components/Banner.jsx";
+import {CategoryPage} from "./pages/CategoryPage.jsx"; // Import the SVG file
 
 const App = () => {
     return (<Router>
@@ -25,6 +26,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/about" element={<About/>}/>
+                <Route path="/category" element={<CategoryPage/>}/>
             </Routes>
             <Footer/>
         </div>
