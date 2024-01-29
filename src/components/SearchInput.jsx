@@ -31,7 +31,7 @@ const SearchInput = React.memo(() => {
     gap: 12px;
     border: solid 1px rgb(230, 230, 230);
     border-radius: 5px;
-    width: 300px; /* Adjust width as needed */
+    width: 85%; /* Adjust width as needed */
     height: 48px;
     background: rgb(255, 255, 255);
     box-sizing: border-box;
