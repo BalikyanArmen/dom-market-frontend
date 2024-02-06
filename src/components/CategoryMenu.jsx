@@ -29,33 +29,42 @@ const options = [
     {label: '20,000₽ -  50,000₽', value: '20000₽-50000₽'},
     {label: '50,000₽ -  100,000₽', value: '50000₽-100000₽'},
 ];
-export const CatalogMenu = ({isOpen}) => {
-    return (
-        isOpen ? <>
-            <br/>
-            <br/>
+export const CategoryMenu = ({ isOpen, onCategoryChange }) => {
+    const handleMenuClick = (item) => {
+        onCategoryChange(item.key, item.item.props.title);
+    };
+
+    return isOpen ? (
+        <>
+            <br />
+            <br />
             <Menu
                 style={{
                     width: 350,
                 }}
-                defaultSelectedKeys={['1']}
+                defaultSelectedKeys={["1"]}
                 mode={"inline"}
                 theme={"light"}
                 selectable={true}
                 triggerSubMenuAction={"click"}
+                onClick={handleMenuClick}
             >
-                <Menu.Item key="1" icon={<MailOutlined/>}>
+                <Menu.Item key="Стройка" icon={<MailOutlined/>}>
                     Стройка
                 </Menu.Item>
-                <Menu.Item key="2" icon={<CalendarOutlined/>}>
+                <Menu.Item key="Сад и досуг" icon={<CalendarOutlined/>}>
                     Сад и досуг
                 </Menu.Item>
-                <Menu.Item key="sub1" icon={<AppstoreOutlined/>}>
+                <Menu.Item key="Техника" icon={<AppstoreOutlined/>}>
                     Техника
                 </Menu.Item>
-                <SubMenu key="sub1-2" title="Уход за растениями и выращивание растений" icon={<AppstoreOutlined/>}>
-                    <Menu.Item key="5">Садовые шланги и аксессуары</Menu.Item>
-                    <Menu.Item key="6">Option 6</Menu.Item>
+                <SubMenu key="sub1-2" title="Уход за растениями и выращивание растений" icon={<AppstoreOutlined />}>
+                    <Menu.Item key="Садовые шланги и аксессуары" title="Уход за растениями и выращивание растений">
+                        Садовые шланги и аксессуары
+                    </Menu.Item>
+                    <Menu.Item key="Option 6" title="Уход за растениями и выращивание растений">
+                        Option 6
+                    </Menu.Item>
                 </SubMenu>
                 <SubMenu key="sub2" title="Navigation Three" icon={<SettingOutlined/>}>
                     <Menu.Item key="7">Option 7</Menu.Item>
@@ -77,6 +86,7 @@ export const CatalogMenu = ({isOpen}) => {
                     {getPriceSubMenu()}
                 </SubMenu>
             </Menu>
-        </> : null
-    );
-}
+        </>
+    ) : null;
+};
+

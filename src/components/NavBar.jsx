@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import styled from "@emotion/styled";
 import SearchInput from "./SearchInput.jsx";
 import {useNavigate} from "react-router-dom";
-import {CatalogMenu} from "./PartnerPart.jsx";
+import {CatalogMenu} from "./CatalogMenu.jsx";
 import LoginDialog from "./Login.jsx";
 
 

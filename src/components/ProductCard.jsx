@@ -1,6 +1,10 @@
 import React from 'react';
 import { Card, Rate, Typography } from 'antd';
+import {useDispatch, useSelector} from 'react-redux';
+import { Link } from 'react-router-dom';
 import productImage from "../assets/product.png";
+import {chooseProduct, selectCategory} from "../toolkit/productSlice.js";
+import {CategoryPageLinks} from "./CategoryPageLinks.jsx";
 
 const { Meta } = Card;
 
@@ -16,23 +20,31 @@ const customCardStyle = {
     background: '#FFF',
 };
 
-export default function ProductCard({ title, description, price, rating, reviews, image, }) {
+export default function ProductCard({ id, title, description, price, rating, reviews, image }) {
+    const dispatch = useDispatch();
+
+    const handleProductClick = () => {
+        dispatch(chooseProduct({ id, title, description, price, rating, reviews, productImage }));
+        dispatch(selectCategory({data:[id,title]}))
+    };
     return (
-        <Card
-            style={customCardStyle}
-            cover={<img alt="Product Image" src={productImage} />}
-        >
-            <Meta
-                title={title}
-                description={
-                    <>
-                        <Typography.Paragraph>{description}</Typography.Paragraph>
-                        <Typography.Paragraph>Price: {price}</Typography.Paragraph>
-                        <Typography.Text>Rating: <Rate disabled defaultValue={rating} /></Typography.Text>
-                        <Typography.Text>Reviews: {reviews}</Typography.Text>
-                    </>
-                }
-            />
-        </Card>
+        <Link to={`/product/?${id}-${title}`} style={{ textDecoration: 'none' }} onClick={handleProductClick}>
+            <Card
+                style={customCardStyle}
+                cover={<img alt="Product Image" src={productImage} />}
+            >
+                <Meta
+                    title={title}
+                    description={
+                        <>
+                            <Typography.Paragraph>{description}</Typography.Paragraph>
+                            <Typography.Paragraph>Price: {price}</Typography.Paragraph>
+                            <Typography.Text>Rating: <Rate disabled defaultValue={rating} /></Typography.Text>
+                            <Typography.Text>Reviews: {reviews}</Typography.Text>
+                        </>
+                    }
+                />
+            </Card>
+        </Link>
     );
 }
