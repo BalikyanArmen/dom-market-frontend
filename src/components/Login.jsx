@@ -8,9 +8,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {Box, Checkbox, FormControlLabel} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import {useDispatch, useSelector} from "react-redux";
+import {setLoggedIn} from "../toolkit/productSlice.js";
 
 export default function LoginDialog({isDialogOpen = false, handleClose}) {
     const [isRegistrationOpen, setRegistrationOpen] = React.useState(false);
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector((state) => state.product.isLoggedIn);
 
     const handleRegistrationOpen = () => {
         setRegistrationOpen(true);
@@ -34,6 +38,9 @@ export default function LoginDialog({isDialogOpen = false, handleClose}) {
                         const email = formJson.email;
                         const password = formJson.password;
                         console.log(formJson);
+                        dispatch(setLoggedIn(true));
+                        console.log(isLoggedIn)
+
                         handleClose();
                     },
                     sx: {

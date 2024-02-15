@@ -1,7 +1,23 @@
-import React from "react";
+import React, {useState} from "react";
 import { Box, Button, Card, Grid, Typography } from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {addProductToBasket} from "../../toolkit/productSlice.js";
 
 export function RightInfo() {
+    const dispatch = useDispatch();
+    const selectedProduct = useSelector(state => state.product.chosenProduct);
+    const [quantity, setQuantity] = useState(1);
+
+    const handleIncrement = () => {
+        setQuantity(quantity + 1);
+    };
+
+    const handleDecrement = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+    console.log(selectedProduct)
     return (
         <Box sx={{ flexGrow: 1,width:536, height:331}}>
             <Grid container spacing={2}>
@@ -89,10 +105,10 @@ export function RightInfo() {
                                         justifyContent: "space-between",
                                     }}
                                 >
-                                    <Button variant="outlined">-</Button>
-                                    <Typography variant="body1">1</Typography>
-                                    <Button variant="outlined">+</Button>
-                                    <Button variant="contained" sx={{ ml: 2 }}>
+                                    <Button variant="outlined" onClick={handleDecrement}>-</Button>
+                                    <Typography variant="body1">{quantity}</Typography>
+                                    <Button variant="outlined" onClick={handleIncrement}>+</Button>
+                                    <Button variant="contained" sx={{ ml: 2 }} onClick={()=>dispatch(addProductToBasket({id: 1, name: selectedProduct.title, price: 12990,count:quantity}))}>
                                         В Корзину
                                     </Button>
                                 </Box>

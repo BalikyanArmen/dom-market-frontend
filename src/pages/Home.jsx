@@ -7,6 +7,8 @@ import Typography from "@mui/material/Typography";
 import {NewProducts} from "../components/NewProducts.jsx";
 import PopularProducts from "../components/PopularProducts.jsx";
 import {PartnersPart} from "../components/PartnersPart.jsx";
+import {DeliveryPoint} from '../components/popups/DeliveryPoint.jsx'
+import {MyAdress} from "../components/popups/MyAdress.jsx";
 
 export default function Home() {
     const products = new Array(33).fill({
@@ -17,22 +19,22 @@ export default function Home() {
         reviews: "45 отзывов",
         image: "https://placehold.co/200x200.png?text=Product+Image",
     });
-
-    const categories = [
-        // ... your category data
-    ];
-
-    const brands = ["Makita", "ПАТРИОТ", "metabo", "DEWALT", "STIHL", "BOSCH"];
+    const [deliveryPoint, setDeliveryPoint] = useState(true)
+    const [myAddress, setMyAddress] = useState(true)
 
 
     return (
         <Box sx={{
-            padding:"15px"
+            padding: "15px"
         }}>
             <NewProducts title={"Новинки"} products={products}/>
             <PopularProducts title={"Популярные категории"}/>
             <PartnersPart/>
             <NewProducts title={"Хиты продаж"} products={products}/>
+            <DeliveryPoint isOpen={deliveryPoint} titleText="Пункты выдачи" handleClose={() => setDeliveryPoint(false)}
+                           headingText=" Выберите пункт выдачи, куда будут отправлены ваши покупки"/>
+            <MyAdress isOpen={myAddress} titleText="Мой адресс" handleClose={() => setMyAddress(false)}
+                      headingText=" Напишите адресс, куда будут отправлены ваши покупки"/>
         </Box>
     );
 }
