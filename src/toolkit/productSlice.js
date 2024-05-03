@@ -29,7 +29,6 @@ const productSlice = createSlice({
             state.basketProducts = [...state.basketProducts, action.payload];
         },
         handleDeleteBasketProduct: (state, action) => {
-            console.log("hasav2")
             state.basketProducts = action.payload.data.basketProducts.filter(product => product.id !== action.payload.data.productId);
         },
     },

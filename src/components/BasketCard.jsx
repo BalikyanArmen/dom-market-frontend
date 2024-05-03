@@ -1,6 +1,8 @@
 import React, {useState} from "react";
-import {Card as MaterialUICard, CardContent, CardActions, Typography, Button, IconButton} from "@mui/material";
+import {Card as MaterialUICard, CardContent, CardActions, Typography, Button, IconButton, Box} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 export const BasketCard = ({name, price, onDelete, count}) => {
     const [quantity, setQuantity] = useState(count);
@@ -29,13 +31,23 @@ export const BasketCard = ({name, price, onDelete, count}) => {
                     {price} ₽
                 </Typography>
             </CardContent>
-            <CardActions>
-                <IconButton aria-label="delete" onClick={handleDelete}>
-                    <DeleteIcon/>
+            <CardActions sx={{display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2}}>
+                <Box sx={{display:"flex",justifyContent: "space-between"}}>
+                    <IconButton onClick={handleDecrement} variant="outlined" disabled={quantity === 1 } >
+                        <RemoveIcon/>
+                    </IconButton>
+                    <Typography variant="h6" sx={{
+                        width: '58px',
+                        height: '42px',
+                        textAlign: 'center'
+                    }}>{quantity}</Typography>
+                    <IconButton onClick={handleIncrement} variant="outlined">
+                        <AddIcon />
+                    </IconButton>
+                </Box>
+                <IconButton  onClick={handleDelete} variant="outlined">
+                    <DeleteIcon />
                 </IconButton>
-                <Button onClick={handleDecrement} variant="contained" size="small">-</Button>
-                <Typography variant="h6">{quantity}</Typography>
-                <Button onClick={handleIncrement} variant="contained" size="small">+</Button>
             </CardActions>
         </MaterialUICard>
     );
