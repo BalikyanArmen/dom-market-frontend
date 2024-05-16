@@ -5,627 +5,224 @@ import {useNavigate} from "react-router-dom";
 import {CatalogMenu} from "./CatalogMenu.jsx";
 import LoginDialog from "./Login.jsx";
 import {BasketDialog} from "./popups/Basket.jsx";
-import PersonIcon from '@mui/icons-material/Person';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {useSelector} from "react-redux";
 
-const frameData = ['Стройка', 'Сад и досуг', 'Техника', 'Все для дома', 'Кухня', 'Ванная комната', 'Строительное оборудование']
+const frameData = ['Стройка', 'Сад и досуг', 'Техника', 'Все для дома', 'Кухня', 'Ванная комната', 'Строительное оборудование'];
+const navbarLinks = ['Стройка', 'Сад и досуг', 'Техника', 'Все для дома', 'Кухня', 'Ванная комната', 'Строительное оборудование']
+
 
 export function NavBar() {
     const navigate = useNavigate();
-    const [isCatalogOpen, setIsCatalogOpen] = useState(false);
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [isBasketOpen,setIsBasketOpen] = useState(false)
-    const handleCatalogOpen = () => {
-        setIsCatalogOpen(!isCatalogOpen)
-    }
-    const handleDialogOpen = () => {
-        setIsDialogOpen(!isDialogOpen)
-    }
+    const [uiState, setUIState] = useState({
+        isCatalogOpen: false,
+        isDialogOpen: false,
+        isBasketOpen: false,
+        searchValue: "",
+        showDropdown: false,
+        mainCatalogMenu: false,
+        secondCatalogMenu: false,
+        thirdCatalogMenu: false,
+        secondCatalogMenuValue:"",
+        thirdCatalogMenuValue:"",
+    });
+    const basketProducts = useSelector((state) => state.product.basketProducts);
 
-    const handleBasketOpen = () =>{
-        setIsBasketOpen(true);
-    }
-    console.log(isDialogOpen)
+    const handleToggleUIState = (key) => {
+        setUIState(prevState => ({...prevState, [key]: !prevState[key]}));
+    };
+
+    const handleSearchInputChange = (event) => {
+        const {value} = event.target;
+        setUIState(prevState => ({...prevState, searchValue: value}));
+    };
+
+    const handleCatalogMenuClick = (menu,title) => {
+        setUIState(prevState => ({
+            ...prevState,
+            secondCatalogMenu: menu === "main" ? !prevState.secondCatalogMenu  : prevState.secondCatalogMenu,
+            thirdCatalogMenu: menu === "secondCatalog" ? !prevState.thirdCatalogMenu : prevState.thirdCatalogMenu
+        }));
+        if(menu === "main"){
+            setUIState(prevState => ({
+                ...prevState,
+                secondCatalogMenuValue:title,
+            }));
+        }else{
+            setUIState(prevState => ({
+                ...prevState,
+                thirdCatalogMenuValue:title,
+            }));
+        }
+    };
 
     return (
-        <>
-            <RootWrapper>
-                <Container>
-                    <Row>
-                        <ColMd4>
-                            <Button>
-                                <Icon>
-                                    <Icon_0001>
-                                        <LocationOn xmlns="http://www.w3.org/2000/svg">
-                                            <path fill="rgba(255, 255, 255, 0.8)"
-                                                  d="M8 10C8.55 10 9.02083 9.80417 9.4125 9.4125C9.80417 9.02083 10 8.55 10 8C10 7.45 9.80417 6.97917 9.4125 6.5875C9.02083 6.19583 8.55 6 8 6C7.45 6 6.97917 6.19583 6.5875 6.5875C6.19583 6.97917 6 7.45 6 8C6 8.55 6.19583 9.02083 6.5875 9.4125C6.97917 9.80417 7.45 10 8 10ZM8 17.35C10.0333 15.4833 11.5417 13.7875 12.525 12.2625C13.5083 10.7375 14 9.38333 14 8.2C14 6.38333 13.4208 4.89583 12.2625 3.7375C11.1042 2.57917 9.68333 2 8 2C6.31667 2 4.89583 2.57917 3.7375 3.7375C2.57917 4.89583 2 6.38333 2 8.2C2 9.38333 2.49167 10.7375 3.475 12.2625C4.45833 13.7875 5.96667 15.4833 8 17.35ZM8 20C5.31667 17.7167 3.3125 15.5958 1.9875 13.6375C0.6625 11.6792 0 9.86667 0 8.2C0 5.7 0.804167 3.70833 2.4125 2.225C4.02083 0.741667 5.88333 0 8 0C10.1167 0 11.9792 0.741667 13.5875 2.225C15.1958 3.70833 16 5.7 16 8.2C16 9.86667 15.3375 11.6792 14.0125 13.6375C12.6875 15.5958 10.6833 17.7167 8 20Z"/>
-                                        </LocationOn>
-                                    </Icon_0001>
-                                </Icon>
-                                <H6>
-                                    Москва
-                                </H6>
-                            </Button>
-                            <BtnSm20>
-                                <IcnSettingsIcnXs>
-                                    <Vector xmlns="http://www.w3.org/2000/svg">
-                                        <path fill="white"
-                                              d="M3.65447 1.32829C3.59544 1.25236 3.52092 1.18985 3.43587 1.14492C3.35082 1.09999 3.25719 1.07368 3.16119 1.06772C3.06519 1.06176 2.96902 1.07629 2.87907 1.11036C2.78912 1.14442 2.70744 1.19724 2.63947 1.26529L1.60547 2.30029C1.12247 2.78429 0.944471 3.4693 1.15547 4.0703C2.03121 6.55788 3.45577 8.81639 5.32347 10.6783C7.1854 12.546 9.4439 13.9705 11.9315 14.8463C12.5325 15.0573 13.2175 14.8793 13.7015 14.3963L14.7355 13.3623C14.8035 13.2943 14.8563 13.2127 14.8904 13.1227C14.9245 13.0327 14.939 12.9366 14.933 12.8406C14.9271 12.7446 14.9008 12.6509 14.8558 12.5659C14.8109 12.4808 14.7484 12.4063 14.6725 12.3473L12.3655 10.5533C12.2843 10.4904 12.19 10.4467 12.0895 10.4256C11.989 10.4044 11.8851 10.4064 11.7855 10.4313L9.59547 10.9783C9.30315 11.0514 8.99689 11.0475 8.70652 10.967C8.41614 10.8866 8.15154 10.7324 7.93847 10.5193L5.48247 8.06229C5.26924 7.84933 5.1148 7.58478 5.03418 7.29439C4.95357 7.00401 4.94954 6.6977 5.02247 6.4053L5.57047 4.2153C5.59538 4.11569 5.59734 4.01173 5.57621 3.91126C5.55507 3.81079 5.51139 3.71642 5.44847 3.63529L3.65447 1.32829ZM1.88447 0.511295C2.05947 0.336244 2.2697 0.200425 2.50121 0.112856C2.73272 0.0252871 2.98021 -0.0120282 3.22725 0.00338804C3.47429 0.0188043 3.71522 0.0865995 3.93405 0.202272C4.15288 0.317944 4.3446 0.478846 4.49647 0.674295L6.29047 2.98029C6.61947 3.4033 6.73547 3.9543 6.60547 4.4743L6.05847 6.6643C6.03019 6.77772 6.03172 6.89654 6.06291 7.0092C6.0941 7.12187 6.15388 7.22456 6.23647 7.3073L8.69347 9.76429C8.77631 9.84705 8.87916 9.90694 8.99202 9.93813C9.10488 9.96933 9.22389 9.97076 9.33747 9.9423L11.5265 9.3953C11.7831 9.33113 12.0509 9.32615 12.3098 9.38072C12.5686 9.43529 12.8116 9.54799 13.0205 9.71029L15.3265 11.5043C16.1555 12.1493 16.2315 13.3743 15.4895 14.1153L14.4555 15.1493C13.7155 15.8893 12.6095 16.2143 11.5785 15.8513C8.93965 14.9228 6.54374 13.4121 4.56847 11.4313C2.58776 9.45631 1.07708 7.06075 0.148471 4.4223C-0.213529 3.3923 0.111471 2.2853 0.851471 1.54529L1.88547 0.511295L1.88447 0.511295Z"/>
-                                    </Vector>
-                                </IcnSettingsIcnXs>
-                                <H6_0001>
-                                    +7(909) 623-22-33
-                                </H6_0001>
-                            </BtnSm20>
-                        </ColMd4>
-                        <ColMd4_0001>
-                            <NaN_0001>
-                                Интернет магазин инструментов
-                            </NaN_0001>
-                        </ColMd4_0001>
-                        <Left>
-                            <Button_0001>
-                                <H6>
-                                    Контакты
-                                </H6>
-                            </Button_0001>
-                        </Left>
-                    </Row>
-                </Container>
-                <Frame15>
-                    <_4>
-                        <Frame13>
-                            <Logo onClick={() => navigate("/")}>
-                                <NaN_0002>
-                                    Строй Дом Маркет
-                                </NaN_0002>
-                            </Logo>
-                            <SearchInput/>
-                            <Frame11>
-                                <Button_0003 onClick={handleDialogOpen}>
-                                    <Icon>
-                                        <Icon_0001>
-                                            <Person xmlns="http://www.w3.org/2000/svg">
-                                                <PersonIcon/>
-                                            </Person>
-                                        </Icon_0001>
-                                    </Icon>
-                                    <H6_0004>
-                                        Войти
-                                    </H6_0004>
-                                </Button_0003>
-                                <Button_0004 onClick={handleBasketOpen}>
-                                    <Icon>
-                                        <Icon_0001>
-                                            <ShoppingCart xmlns="http://www.w3.org/2000/svg">
-                                                <ShoppingCartIcon/>
-\                                            </ShoppingCart>
-                                        </Icon_0001>
-                                    </Icon>
-                                    <H6_0004>
-                                        Корзина
-                                    </H6_0004>
-                                    <Badge>
-                                        <Text>
-                                            1
-                                        </Text>
-                                    </Badge>
-                                </Button_0004>
-                            </Frame11>
-                        </Frame13>
-                    </_4>
-                    <_2>
-                        <Button_0005 onClick={handleCatalogOpen}>
-                            <Icon>
-                                <Icon_0001>
-                                    <Menu xmlns="http://www.w3.org/2000/svg">
-                                        <path fill="white"
-                                              d="M1 12C0.716667 12 0.479167 11.9042 0.2875 11.7125C0.0958333 11.5208 0 11.2833 0 11C0 10.7167 0.0958333 10.4792 0.2875 10.2875C0.479167 10.0958 0.716667 10 1 10L17 10C17.2833 10 17.5208 10.0958 17.7125 10.2875C17.9042 10.4792 18 10.7167 18 11C18 11.2833 17.9042 11.5208 17.7125 11.7125C17.5208 11.9042 17.2833 12 17 12L1 12ZM1 7C0.716667 7 0.479167 6.90417 0.2875 6.7125C0.0958333 6.52083 0 6.28333 0 6C0 5.71667 0.0958333 5.47917 0.2875 5.2875C0.479167 5.09583 0.716667 5 1 5L17 5C17.2833 5 17.5208 5.09583 17.7125 5.2875C17.9042 5.47917 18 5.71667 18 6C18 6.28333 17.9042 6.52083 17.7125 6.7125C17.5208 6.90417 17.2833 7 17 7L1 7ZM1 2C0.716667 2 0.479167 1.90417 0.2875 1.7125C0.0958333 1.52083 0 1.28333 0 1C0 0.716667 0.0958333 0.479167 0.2875 0.2875C0.479167 0.0958333 0.716667 0 1 0L17 0C17.2833 0 17.5208 0.0958333 17.7125 0.2875C17.9042 0.479167 18 0.716667 18 1C18 1.28333 17.9042 1.52083 17.7125 1.7125C17.5208 1.90417 17.2833 2 17 2L1 2Z"/>
-                                    </Menu>
-                                </Icon_0001>
-                            </Icon>
-                            <H6_0006>
-                                Каталог товаров
-                            </H6_0006>
-                        </Button_0005>
-                        {frameData.map((item, index) => (
-                            <div id={index}>
-                                <Tab onClick={() => console.log("Hey")}>
-                                    <Text_0001>
-                                        {item}
-                                    </Text_0001>
-                                </Tab>
-                            </div>
-                        ))}
-                    </_2>
-                </Frame15>
-            </RootWrapper>
-            <CatalogMenu isOpen={isCatalogOpen}/>
-            <LoginDialog isDialogOpen={isDialogOpen} handleClose={()=>setIsDialogOpen(false)}/>
-            <BasketDialog isOpen={isBasketOpen} handleClose={()=>setIsBasketOpen(false)}/>
-        </>
+        <div className="main-navbar-container">
+            <div className="address-contact-part">
+                <div className="address-section">
+                    <div style={{display: "flex"}}>
+                        <img src="../../public/location.png" width="24" height="24"/>
+                        <span style={{fontSize: '19px'}}>
+                            Москва
+                        </span>
+                    </div>
+                    <div style={{display: "flex", marginLeft: "5px"}}>
+                        <img src="../../public/callIcon.svg" width="20" height="20"/>
+                        <span style={{fontSize: '19px'}}>
+                            +7(909) 623-22-33
+                        </span>
+                    </div>
+                </div>
+                <div className="navbar-main-title">
+                    <div>
+                        Интернет магазин инструментов
+                    </div>
+                </div>
+                <div className="contacts-section">
+                    <div>
+                        Контакты
+                    </div>
+                </div>
+            </div>
+            <div className="navbar-content">
+                <div className="navbar-content-actions">
+                    <div className="navbar-content-actions-title" onClick={() => navigate("/")}>
+                        <h2>Строй Дом Маркет</h2>
+                    </div>
+                    <div className="navbar-content-actions-search">
+                        <div style={{position: "relative"}}>
+                            <button
+                                className="search-option-btn"
+                                onClick={() => handleToggleUIState("showDropdown")}
+                                style={{display: "flex"}}
+                            >
+                                <span style={{fontSize: "14px"}}>Все</span>
+                                <img src="../../public/ArrowBottom.png" width={20} height={20}/>
+                            </button>
+                            {uiState.showDropdown && (
+                                <div className="dropdown-content">
+                                    {frameData.map((option, index) => (
+                                        <div
+                                            key={index}
+                                            className="dropdown-option"
+                                            onClick={() => handleDropdownOptionClick(option)}
+                                        >
+                                            {option}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
+                        <input
+                            className="search-input"
+                            type="text"
+                            placeholder="Поиск"
+                            value={uiState.searchValue} // Bind input value to state
+                            onChange={handleSearchInputChange} // Call function on input change
+                        /></div>
+                    <div className="navbar-content-actions-login_basket">
+                        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}
+                             onClick={() => handleToggleUIState("isDialogOpen")}>
+                            <img src="../../public/person.png" width={24} height={24}/>
+                            <span style={{marginTop: "5px"}}>
+                                Войти
+                            </span>
+                        </div>
+                        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}
+                             onClick={() => handleToggleUIState("isBasketOpen")}>
+                            <div style={{position: "relative"}}>
+                                <img src="../../public/Basket.png" width={24} height={24} alt="Basket icon"/>
+                                <div className="basket-number">
+                                    {basketProducts.length}
+                                </div>
+                            </div>
+                            <span>Корзина</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="navbar-content-navigation">
+                    <div className="navbar-content-navigation-main-catalog">
+                        <div style={{position: "relative"}}>
+                            <button
+                                onClick={() => {
+                                    setUIState(prevState => ({
+                                        ...prevState,
+                                        mainCatalogMenu: !prevState.mainCatalogMenu,
+                                        secondCatalogMenu: false,
+                                        thirdCatalogMenu: false
+                                    }));
+                                }}
+                                style={{
+                                    display: "flex",
+                                    backgroundColor: "transparent",
+                                    border: "none",
+                                    color: "white"
+                                }}
+                            >
+                                <img src="../../public/BurgerIcon.png" width={20} height={20}/>
+                                <span>Каталог товаров</span>
+                            </button>
+                            {uiState.mainCatalogMenu && (
+                                <div className="dropdown-content-catalog">
+                                    {frameData.map((option, index) => (
+                                        <div
+                                            key={index}
+                                            className="dropdown-option"
+                                            onClick={() => handleCatalogMenuClick("main",option)}
+                                        >
+                                            {option}
+                                            <img src="../../public/chevron_right.png" width={20} height={20}/>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {uiState.mainCatalogMenu && uiState.secondCatalogMenu && (
+                                <div className="dropdown-content-catalog-second">
+                                    <span className="dropdown-content-catalog-title">{uiState.secondCatalogMenuValue}</span>
+                                    {frameData.map((option, index) => (
+                                        <div
+                                            key={index}
+                                            className="dropdown-option"
+                                            onClick={() => handleCatalogMenuClick("secondCatalog",option)}
+                                        >
+                                            {option}
+                                            <img src="../../public/chevron_right.png" width={20} height={20}/>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {uiState.mainCatalogMenu &&  uiState.secondCatalogMenu && uiState.thirdCatalogMenu && (
+                                <div className="dropdown-content-catalog-third">
+                                    <span className="dropdown-content-catalog-title">{uiState.thirdCatalogMenuValue}</span>
+                                    {frameData.map((option, index) => (
+                                        <div
+                                            key={index}
+                                            className="dropdown-option"
+                                        >
+                                            {option}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+
+                    </div>
+
+                    {['Стройка', 'Сад и досуг', 'Техника', 'Все для дома', 'Кухня', 'Ванная комната', 'Строительное оборудование'].map((option, index) => (
+                        <div
+                            key={index}
+                            className="navbar-content-navigation-navbar-links"
+                            onClick={() => navigate(`navlink${index}`)}
+                        >
+                            {option}
+                        </div>
+                    ))}
+
+                </div>
+            </div>
+            <LoginDialog isDialogOpen={uiState.isDialogOpen} handleClose={() => handleToggleUIState("isDialogOpen")}/>
+            <BasketDialog isOpen={uiState.isBasketOpen} handleClose={() => handleToggleUIState("isBasketOpen")}/>
+        </div>
     )
 }
-
-const RootWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: center;
-  background: rgb(35, 166, 240);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  box-sizing: border-box;
-`;
-
-const Container = styled.div`
-  height: 48px;
-  overflow: hidden;
-  background: rgb(37, 43, 66);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  position: relative;
-  align-self: stretch;
-  flex-shrink: 0;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: flex-start;
-  box-sizing: border-box;
-  padding: 0px 24px;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-`;
-
-const ColMd4 = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  gap: 10px;
-  width: 463px;
-  height: 46px;
-  box-sizing: border-box;
-`;
-
-const Button = styled.button`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  flex: none;
-  gap: 4px;
-  border-radius: 4px;
-  height: 30px;
-  box-sizing: border-box;
-  padding: 2px 12px;
-  background: transparent;
-`;
-
-const Icon = styled.div`
-  width: 24px;
-  height: 24px;
-  position: relative;
-`;
-
-const Icon_0001 = styled.div`
-  overflow: hidden;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-`;
-
-const LocationOn = styled.svg`
-  width: 16px;
-  height: 20px;
-  position: absolute;
-  left: 4px;
-  top: 2px;
-  right: 4px;
-  bottom: 2px;
-`;
-
-const H6 = styled.span`
-  color: white;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  font-family: Roboto, sans-serif;
-  font-weight: initial;
-  line-height: 22px;
-  text-align: center;
-`;
-
-const BtnSm20 = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row;
-  align-items: center;
-  flex: none;
-  gap: 5px;
-  border-radius: 5px;
-  box-sizing: border-box;
-  padding: 10px;
-`;
-
-const IcnSettingsIcnXs = styled.div`
-  width: 16px;
-  height: 16px;
-  overflow: hidden;
-  position: relative;
-`;
-
-const Vector = styled.svg`
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-`;
-
-const H6_0001 = styled.span`
-  color: white;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  font-family: Montserrat, sans-serif;
-  font-weight: initial;
-  line-height: 24px;
-  text-align: left;
-`;
-
-const ColMd4_0001 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  gap: 10px;
-  width: 463px;
-  box-sizing: border-box;
-  padding: 10px;
-`;
-
-const NaN_0001 = styled.span`
-  color: white;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  font-family: Montserrat, sans-serif;
-  font-weight: initial;
-  line-height: 24px;
-  text-align: left;
-`;
-
-const Left = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  gap: 8px;
-  width: 463px;
-  height: 46px;
-  box-sizing: border-box;
-  padding: 10px;
-`;
-
-const Button_0001 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: none;
-  gap: 10px;
-  border-radius: 4px;
-  height: 30px;
-  box-sizing: border-box;
-  padding: 2px 4px;
-`;
-
-const Frame15 = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  align-self: stretch;
-  box-sizing: border-box;
-  padding: 16px 0px;
-  flex-shrink: 0;
-`;
-
-const _4 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 24px;
-  align-self: stretch;
-  box-sizing: border-box;
-  padding: 0px 38px;
-  flex-shrink: 0;
-`;
-
-const Frame13 = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row;
-  align-items: center;
-  gap: 24px;
-  align-self: stretch;
-  box-sizing: border-box;
-  flex-shrink: 0;
-`;
-
-const Logo = styled.div`
-  width: 220px;
-  height: 48px;
-  position: relative;
-`;
-
-const NaN_0002 = styled.span`
-  color: white;
-  text-overflow: ellipsis;
-  font-size: 20px;
-  font-family: Montserrat, sans-serif;
-  font-weight: initial;
-  text-align: left;
-  position: absolute;
-  left: 0px;
-  top: 8px;
-`;
-
-const InputHeader = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row;
-  align-items: center;
-  flex: 1;
-  gap: 12px;
-  border: solid 1px rgb(230, 230, 230);
-  border-radius: 5px;
-  width: 944px;
-  height: 48px;
-  background: rgb(255, 255, 255);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  box-sizing: border-box;
-`;
-
-const Button_0002 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  align-self: stretch;
-  background: rgb(235, 235, 235);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  box-sizing: border-box;
-  padding: 0px 8px;
-  flex-shrink: 0;
-`;
-
-const H6_0003 = styled.span`
-  color: rgba(0, 0, 0, 0.8);
-  text-overflow: ellipsis;
-  font-size: 13px;
-  font-family: Montserrat, sans-serif;
-  font-weight: initial;
-  text-align: center;
-  width: 26px;
-`;
-
-const Icon_0003 = styled.div`
-  overflow: hidden;
-  position: absolute;
-  left: 24px;
-  top: 0px;
-  right: -24px;
-  bottom: 0px;
-`;
-
-const ChevronRight = styled.svg`
-  width: 7px;
-  height: 11px;
-  position: absolute;
-  left: 7px;
-  top: 9px;
-  right: 11px;
-  bottom: 4px;
-  transform: rotate(-90deg);
-  transform-origin: top left;
-`;
-
-const NaN_0003 = styled.span`
-  color: rgba(0, 0, 0, 0.6);
-  text-overflow: ellipsis;
-  font-size: 14px;
-  font-family: Roboto, sans-serif;
-  font-weight: initial;
-  text-align: center;
-`;
-
-const Frame11 = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row;
-  align-items: center;
-  flex: none;
-  gap: 8px;
-  box-sizing: border-box;
-`;
-
-const Button_0003 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 4px;
-  align-self: stretch;
-  box-sizing: border-box;
-  padding: 2px 12px;
-  flex-shrink: 0;
-`;
-
-const Person = styled.svg`
-  width: 18px;
-  height: 18px;
-  position: absolute;
-  left: 3px;
-  top: 3px;
-  right: 3px;
-  bottom: 3px;
-`;
-
-const H6_0004 = styled.span`
-  color: white;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  font-family: Roboto, sans-serif;
-  font-weight: initial;
-  text-align: center;
-`;
-
-const Button_0004 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  flex: none;
-  border-radius: 4px;
-  box-sizing: border-box;
-  padding: 2px 12px;
-`;
-
-const ShoppingCart = styled.svg`
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 1px;
-  top: 2px;
-  right: 3px;
-  bottom: 2px;
-`;
-
-const Badge = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  flex: none;
-  border-radius: 100px;
-  background: rgb(255, 0, 0);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  box-sizing: border-box;
-  padding: 0px 7px;
-`;
-
-const Text = styled.span`
-  color: white;
-  text-overflow: ellipsis;
-  font-size: 12px;
-  font-family: Roboto, sans-serif;
-  font-weight: initial;
-  line-height: 20px;
-  text-align: left;
-`;
-
-const _2 = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row;
-  align-items: center;
-  gap: 24px;
-  align-self: stretch;
-  box-sizing: border-box;
-  padding: 0px 40px;
-  flex-shrink: 0;
-`;
-
-const Button_0005 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  flex: none;
-  gap: 4px;
-  border-radius: 4px;
-  height: 42px;
-  background: linear-gradient(-90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2));
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  box-sizing: border-box;
-  padding: 10px 12px;
-`;
-
-const Menu = styled.svg`
-  width: 18px;
-  height: 12px;
-  position: absolute;
-  left: 3px;
-  top: 6px;
-  right: 3px;
-  bottom: 6px;
-`;
-
-const H6_0006 = styled.span`
-  color: white;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  font-family: Montserrat, sans-serif;
-  font-weight: initial;
-  line-height: 22px;
-  text-align: center;
-`;
-
-const Frame14 = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  gap: 28px;
-  align-self: stretch;
-  box-sizing: border-box;
-  flex-shrink: 0;
-`;
-
-const Tab = styled.button`
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  align-items: center;
-  flex: none;
-  height: 42px;
-  box-sizing: border-box;
-  padding: 1px 8px;
-  background: transparent;
-  border: none;
-`;
-
-const Text_0001 = styled.span`
-  color: rgba(255, 255, 255, 0.95);
-  text-overflow: ellipsis;
-  font-size: 14px;
-  font-family: Montserrat, sans-serif;
-  font-weight: initial;
-  line-height: 22px;
-  text-align: left;
-`;
-

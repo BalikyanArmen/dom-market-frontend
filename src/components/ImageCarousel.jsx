@@ -26,7 +26,6 @@ export const ImageCarousel = ({
                 <img src={`${arrowLeft}`} alt="alt"/>
             </IconButton>
             {displayedProducts.map((product, index) => {
-                console.log(product)
                 return (
                     // Wrap ChildComponent in JSX tags
                     <React.Fragment key={index}>

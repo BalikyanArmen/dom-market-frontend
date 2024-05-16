@@ -2,7 +2,7 @@ import React from "react";
 import Container from "@mui/material/Container";
 import { IconButton } from "@mui/material";
 import brand1 from "../assets/brand1.png";
-import brand2 from "../assets/brand2.png";
+import brand2 from "../../public/brand2.png";
 
 const brandImages = [brand1, brand2, brand2, brand2, brand2, brand2];
 

@@ -9,6 +9,9 @@ import PopularProducts from "../components/PopularProducts.jsx";
 import {PartnersPart} from "../components/PartnersPart.jsx";
 import {DeliveryPoint} from '../components/popups/DeliveryPoint.jsx'
 import {MyAdress} from "../components/popups/MyAdress.jsx";
+import {Link} from "react-router-dom";
+import {Card, Rate} from "antd";
+import productImage from "../assets/product.png";
 
 export default function Home() {
     const products = new Array(33).fill({
@@ -19,14 +22,17 @@ export default function Home() {
         reviews: "45 отзывов",
         image: "https://placehold.co/200x200.png?text=Product+Image",
     });
-    const [deliveryPoint, setDeliveryPoint] = useState(true)
-    const [myAddress, setMyAddress] = useState(true)
+    const [deliveryPoint, setDeliveryPoint] = useState(false)
+    const [myAddress, setMyAddress] = useState(false)
 
 
     return (
         <Box sx={{
             padding: "15px"
         }}>
+            <NewProducts
+                products={[{image: "../../public/Banner.png"}, {image: "https://placehold.co/200x200.png?text=Product+Image"}, {image: "https://placehold.co/200x200.png?text=Product+Image"}]}
+                cardsInRow={1}/>
             <NewProducts title={"Новинки"} products={products}/>
             <PopularProducts title={"Популярные категории"}/>
             <PartnersPart/>
